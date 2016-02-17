@@ -1,190 +1,76 @@
-##Description: qupai
+# 趣拍接入指南
+APICloud平台使用趣拍的教程，包含入驻阿里百川，获取趣拍SDK
 
-* [initQuPai](#1)
+因为此模块需要用到以下三个东西：
 
-* [startQuPai](#2)
+1. 安全图片，从阿里百川的顽兔平台获取
 
-* [返回码](#3)
+2. 将安全图片放到依赖的自定义模块中，这个很重要，否则初始化都不能通过
+
+3. 水印图片，放在自己工程的目录下，路径为 "assets://Qupai/watermark/logo.png", 代码中需要指定
+
+>指南目录
+
+* [获取安全图片](#获取安全图片)
+
+* [绑定依赖的模块](#绑定依赖的模块)
+
+* [水印图片](#水印图片)
+
 
 ##**概述**
 
-趣拍是杭州短趣和阿里巴巴联合提供的短视频拍摄SDK，为广大移动应用开发者提供免费、简单、快捷、稳定的接口，帮助开发者快速实现自有APP上的短视频应用开发。
+首先需要确定，你现在是否已经生成了Android的证书，[前去查看](http://www.apicloud.com/certificate)，下图所示则说明没有生成证书
 
-其中包含短视频拍摄、水印、拍摄码率等的自定义设置，并自带美颜功能。
+![](./img/zs.jpg)
 
->使用须知
+1. 如果没有，那么你可以直接下载自定义模块(myqupai.zip), 添加到自定义模块中，调用接口进行测试，打APK包的时候选择测试版
 
->>1. 使用前需要去阿里百川配置AlibabaSDK基础包和图片服务插件，[传送门](http://baichuan.taobao.com), 具体流程请参考[接入指南](https://github.com/bringmehome/Qupai)
+2. 如果已经生成了证书，那么请往下继续看
 
->>2. 如果只是测试，可以直接在[GITHUB](https://github.com/bringmehome/Qupai)里下载自定义模块包，添加到自己的自定义模块中，不要生成android的证书！不要生成android的证书！不要生成android的证书！打包的时候使用测试版即可
 
->>3. 如果你已经生成了安卓证书，请从[阿里百川的顽兔平台](http://wantu.taobao.com/space/index.htm)获取到SDK(android_baichuan_media_sdk.zip), 操作方法,[传送门](http://baichuan.taobao.com/doc2/detail.htm?articleId=102765&docType=1&treeId=38)
+#**获取安全图片**<div id="获取安全图片"></div>
 
->>4. 获取到SDK后解压得到文件"android_baichuan_media_sdk.zip\OneSDK\res\drawable\yw_1222.jpg"，并在[GITHUB](https://github.com/bringmehome/Qupai)里下载自定义模块包，替换"myqupai\res_myqupai\res\drawable"文件夹下的yw_1222.jpg文件，更新你的自定义模块
+1. 首先，在APICloud平台生成apk文件，下载到本地
 
->>5. 使用中遇到任何问题，请联系作者邮箱（sin@feeling.life）,作者会在第一时间回复。
+![](./img/apk.png)
 
-#**initQuPai**<div id="1"></div>
+2. 完成阿里百川的接入指引，[传送门](http://baichuan.taobao.com/doc2/detail?spm=0.0.0.0.Ic4eyn&treeId=38&articleId=102761&docType=1)
 
-    初始化趣拍
+3. 通过控制台进入 SDK 下载，生成最新SDK，[传送门](http://wantu.taobao.com/sdk/index.htm?spm=a312x.7754881.0.0.HYWRNF#/mobile)
 
-    initQuPai(function(ret, err))
+![](./img/sdkxz.png)
 
-##callback(ret,err)
+4. 语言选择 Android，并APICloud平台生成apk文件 (APK 包的内容不做要求，可以不是最终的应用；但是私钥跟安全图片必须是一一对应的，如果私钥发生改变需重新生成安全图片) ，选择要打包的服务(图片和趣拍短视频都勾选)，点击 “生成最新的SDK”
 
-ret：
+![](./img/dbfw.png)
 
-- 类型：JSON对象
+5. 下载SDK
 
-内部字段：
+![](./img/xzsdk.png)
 
-```js
-{
-    code : 0              //返回码
-    message:"success"     //正确返回
-}
-```
+6. 解压，并获取安全图片 yw_1222.jpg
 
-err：
+![](./img/yw12222.png)
 
-- 类型：JSON对象
 
-内部字段：
+#**绑定依赖的模块**<div id="绑定依赖的模块"></div>
 
-```js
-{
-    code : 702            //错误码
-    message:              //错误描述
-}
-```
+1、开通阿里妈妈会员，[http://media.alimama.com/user/limit_status.htm?spm=a219a.7395903.0.0.zr6Ni5](http://media.alimama.com/user/limit_status.htm?spm=a219a.7395903.0.0.zr6Ni5),显示以下界面则说明开通成功
 
-##示例代码
+![](./img/07.png)
 
-```js
-var qupai = api.require('qupai');
-qupai.initQuPai(function(ret, err){
-    if(ret)
-        alert(JSON.stringify(ret));
-    else
-        alert("err = "+JSON.stringify(err));
-});
-```
+2、此时再回来查看证书权限管理[http://my.open.taobao.com/](http://my.open.taobao.com/)，是不是已经有了，这个id在调用[showTaokeItemById接口](http://docs.apicloud.com/%E7%AB%AFAPI/%E5%BC%80%E6%94%BESDK/alibaichuan#6)的时候需要用到
 
-##补充说明
+![](./img/08.png)
 
-    无
 
-##可用性
+#**水印图片**<div id="水印图片"></div>
 
-    Android系统
+1、点此加入淘宝联盟[http://pub.alimama.com/?spm=0.0.0.0.CrMksN](http://pub.alimama.com/?spm=0.0.0.0.CrMksN)
 
-    可提供的1.0.0及更高版本
+![](./img/09.png)
 
+![](./img/10.png)
 
-#**startQuPai**<div id="2"></div>
-
-    打开拍摄视频的页面
-
-    startQuPai({params},function(ret, err)
-
-##params
-
-maxRecordTime：
-
-- 类型：number
-- 默认值：无
-- 描述：最长拍摄时间，单位为秒
-
-videoBitrate：
-
-- 类型：number
-- 默认值：无
-- 描述：视频的码率，(1024 * 1000)的整数倍，如 2000 * 1024
-
-waterMarkPath：
-
-- 类型：字符串
-- 默认值：无
-- 描述：水印图片的路径，如 "assets://widget/image/logo.png"
-
-waterMarkPostion：
-
-- 类型：number
-- 默认值：无
-- 描述：水印的坐标，1 右上角， 2 右下角
-
-##callback(ret,err)
-
-ret：
-
-- 类型：JSON对象
-- 描述：返回的文件路径，如视频文件名为sin_2016-02-17-12-03-42-142.mp4, 图片文件名为sin_2016-02-17-12-03-42-142.jpg
-
-内部字段：
-
-```js
-{
-    code : 0              //返回码
-    message:"file:/storage/emulated/0/Sins/sin_2016-02-17-12-03-42-142"     //文件路径
-}
-```
-
-err：
-
-- 类型：JSON对象
-
-内部字段：
-
-```js
-{
-    code : 9002                //返回码
-    message:"Canceled."        //错误描述
-}
-```
-
-##示例代码
-
-```js
-var qupai = api.require('qupai');
-
-var param = {
-    maxRecordTime:6,
-    videoBitrate:1024*1000,
-    waterMarkPath:"assets://Qupai/watermark/logo.png",
-    waterMarkPostion:1,
-};
-
-qupai.startQuPai(param,function(ret, err){
-    if(ret)
-        alert(JSON.stringify(ret));
-    else
-        alert("err = "+JSON.stringify(err));
-});
-```
-
-##补充说明
-
-    无
-
-##可用性
-
-    Android系统
-
-    可提供的1.0.0及更高版本
-
-
-#**返回码**<div id="3"></div>
-
-0        正确返回
-
-1        请求参数错误
-
-2        初始化失败
-
-702      没有找到图片文件，请确保图片文件 yw_1222.jpg 在 res\drawable 目录下
-
-9001     Can not get QupaiService.
-
-9002     Canceled.
-
-9003     Copy file failed.
+这个和开店一样，所以需要人工审核，审核时间也有点长，一般1-2个工作日

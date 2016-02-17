@@ -53,12 +53,11 @@ APICloud平台使用趣拍的教程，包含入驻阿里百川，获取趣拍SDK
 
 ![](./img/yw12222.png)
 
-
 #**绑定依赖的模块**<div id="绑定依赖的模块"></div>
 
-1、开通阿里妈妈会员，[http://media.alimama.com/user/limit_status.htm?spm=a219a.7395903.0.0.zr6Ni5](http://media.alimama.com/user/limit_status.htm?spm=a219a.7395903.0.0.zr6Ni5),显示以下界面则说明开通成功
+1、下载自定义模块
 
-![](./img/07.png)
+![](./img/xzzdymk.png)
 
 2、此时再回来查看证书权限管理[http://my.open.taobao.com/](http://my.open.taobao.com/)，是不是已经有了，这个id在调用[showTaokeItemById接口](http://docs.apicloud.com/%E7%AB%AFAPI/%E5%BC%80%E6%94%BESDK/alibaichuan#6)的时候需要用到
 

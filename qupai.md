@@ -89,10 +89,6 @@ qupai.initQuPai(param, function(ret, err){
 });
 ```
 
-##补充说明
-
-    无
-
 ##可用性
 
     Android系统, iOS系统
@@ -179,7 +175,7 @@ ret：
     data:{
         videoPath: "/storage/emulated/0/Sins/sin_2016-03-27-23-07-20-039.mp4",   //视频文件路径
         imgPath: "/storage/emulated/0/Sins/sin_2016-03-27-23-07-20-039.png",     //图片文件路径
-        duration: 2903                                                           //视频时长(单位:ms)
+        duration: 2903                                                           //视频时长(单位:ms),iOS版本会始终返回0
     }
 }
 ```
@@ -192,7 +188,7 @@ err：
 
 ```js
 {
-    code : 2003                //返回码
+    code : 203                //返回码
     message:""                 //错误描述
 }
 ```
@@ -246,10 +242,6 @@ imgUrl：
 - 类型：字符串
 - 描述：远程缩略图地址
 
-progress：
-- 类型：number
-- 描述：文件上传进度(百分比)
-
 ##callback(ret,err)
 
 ret：
@@ -260,12 +252,14 @@ ret：
 内部字段：
 
 ```js
+上传未完成时候ret内容如下
+
 {
     code : 203,             //返回码
-    progress: 75           //字符串类型；上传进度 (上传未完成时候ret只有这个属性传输上传进度值)
+    progress: 75            //字符串类型；上传进度 
 }
 
-或者
+上传完成后ret内容如下
 
 {
     code : 200,                                            //返回码
@@ -316,11 +310,11 @@ qupai.upload(param, function(ret, err){
 
 #**返回码**<div id="4"></div>
 
-200        Success
+200 Success
 
-201        Parameter is null.
+201 Parameter is null.
 
-203        文件正在上传.
+203 文件正在上传.
 
 1101 Host（请求的域名） 未授权， 通常都是域名地址错误导致
 
